@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="description" content="Sanad — transparent, bilingual donation case tracker.">
+<title>سند — تابع حالات التبرع بشفافية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%230E4B43'/%3E%3Cpolygon points='50,18 75,32 75,68 50,82 25,68 25,32' fill='none' stroke='%23C9952C' stroke-width='5'/%3E%3C/svg%3E">
+</head>
+<body>
+
+<!-- ===================== top bar ===================== -->
+<header class="topbar">
+  <a href="#top" class="brand">
+    <span class="brand-mark">
+      <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polygon points="50,12 82,30 82,70 50,88 18,70 18,30" stroke="#F2DFA8" stroke-width="6"/>
+      </svg>
+    </span>
+    <span data-i18n="brand">سند</span>
+  </a>
+  <div class="topbar-actions">
+    <a class="btn-icon" id="communityShortcut" href="#community" aria-label="Community">💬</a>
+    <button class="lang-toggle" id="langToggle" type="button">EN</button>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ===================== hero / ledger ===================== -->
+  <section class="hero">
+    <div class="lattice-bg" aria-hidden="true"></div>
+    <div class="container hero-inner">
+      <span class="hero-eyebrow"><span class="dot"></span><span data-i18n="heroEyebrow">سجل حي</span></span>
+      <h1 data-i18n="heroTitle">كل تبرع، موثّق بشفافية</h1>
+      <p data-i18n="heroSub">تصفح الحالات المفتوحة، وتابع وجهة كل تبرع، واطّلع على إجمالي كل شهر.</p>
+
+      <div class="ledger">
+        <div class="ledger-item">
+          <span class="ledger-num" id="statRaised">—</span>
+          <span class="ledger-label" data-i18n="statRaised">إجمالي ما تم جمعه</span>
+        </div>
+        <div class="ledger-item">
+          <span class="ledger-num" id="statActive">—</span>
+          <span class="ledger-label" data-i18n="statActive">حالات مفتوحة</span>
+        </div>
+        <div class="ledger-item">
+          <span class="ledger-num" id="statDonors">—</span>
+          <span class="ledger-label" data-i18n="statDonors">متبرع</span>
+        </div>
+        <div class="ledger-item">
+          <span class="ledger-num" id="statCompleted">—</span>
+          <span class="ledger-label" data-i18n="statCompleted">حالات مكتملة</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+
+    <!-- ===================== filters ===================== -->
+    <section class="filters">
+      <div class="section-head" style="margin-top:0">
+        <h2 data-i18n="filtersHeading">تصفح حسب الفئة</h2>
+      </div>
+      <div class="filters-scroll" id="filtersScroll"></div>
+    </section>
+
+    <!-- ===================== cases ===================== -->
+    <section class="cases">
+      <div class="section-head">
+        <h2 data-i18n="casesHeading">الحالات المفتوحة</h2>
+        <p data-i18n="casesSub">اضغط على أي حالة لمعرفة التفاصيل والتبرع.</p>
+      </div>
+      <div class="cases-grid" id="casesGrid">
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+        <div class="skeleton"></div>
+      </div>
+    </section>
+
+    <!-- ===================== monthly stats ===================== -->
+    <section class="monthly">
+      <div class="section-head">
+        <h2 data-i18n="monthlyHeading">التبرعات الشهرية حسب الفئة</h2>
+        <p data-i18n="monthlySub">تُقرأ من ملف data/monthly-donations.xlsx.</p>
+      </div>
+      <div class="monthly-card">
+        <p class="monthly-status" id="monthlyStatus" data-i18n="monthlyLoading">جارٍ تحميل الأرقام الشهرية…</p>
+        <div class="chart-scroll">
+          <canvas id="monthlyChart" height="260" style="display:none"></canvas>
+        </div>
+        <div class="legend-row" id="monthlyLegend"></div>
+      </div>
+    </section>
+
+    <!-- ===================== community ===================== -->
+    <section class="community" id="community">
+      <div class="section-head">
+        <h2 data-i18n="communityHeading">انضم إلى المجتمع</h2>
+        <p data-i18n="communitySub">تابع الحالات الجديدة وتواصل مع الفريق.</p>
+      </div>
+      <div class="community-grid">
+        <a class="community-card" target="_blank" rel="noopener" id="whatsappCardLink" href="#">
+          <span class="ico">🟢</span>
+          <span>
+            <strong data-i18n="whatsappCard">مجموعة واتساب</strong>
+            <span data-i18n="whatsappSub">تحديثات وأسئلة سريعة</span>
+          </span>
+        </a>
+        <a class="community-card" target="_blank" rel="noopener" id="telegramCardLink" href="#">
+          <span class="ico">✈️</span>
+          <span>
+            <strong data-i18n="telegramCard">قناة تيليجرام</strong>
+            <span data-i18n="telegramSub">إعلانات فقط</span>
+          </span>
+        </a>
+        <a class="community-card" id="contactCardLink" href="#">
+          <span class="ico">✉️</span>
+          <span>
+            <strong data-i18n="contactCard">راسل الفريق</strong>
+            <span data-i18n="contactSub">اقترح حالة أو اسأل أي شيء</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+  <footer>
+    <div class="container">
+      <p class="foot-brand" data-i18n="brand">سند</p>
+      <p data-i18n="footerNote">سجل مفتوح للجميع — كل حالة ورقم هنا قابل للتعديل من ملفات بيانات المشروع.</p>
+      <p data-i18n="footerManaged">بيانات الحالات والأرقام الشهرية تُدار عبر GitHub.</p>
+    </div>
+  </footer>
+
+</main>
+
+<!-- ===================== case modal (bottom sheet) ===================== -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-sheet" id="modalSheet" role="dialog" aria-modal="true"></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
