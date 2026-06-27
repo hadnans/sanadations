@@ -70,6 +70,7 @@ const I18N = {
     shareCopied: "Link copied",
     egp: "EGP",
     caseWord: "Case",
+    emergencyLabel: "URGENT",
   },
   ar: {
     dir: "rtl",
@@ -115,6 +116,7 @@ const I18N = {
     shareCopied: "تم نسخ الرابط",
     egp: "ج.م",
     caseWord: "حالة",
+    emergencyLabel: "عاجل",
   },
 };
 
@@ -200,15 +202,27 @@ function makeChip(cat, label, icon) {
 function renderCases() {
   const grid = $("#casesGrid");
   grid.innerHTML = "";
-  const list = CASES.filter((c) => currentFilter === "all" || c.category === currentFilter);
+  let list = CASES.filter((c) => {
+    if (currentFilter === "all") return true;
+    const cats = c.categories || [c.category];
+    return cats.includes(currentFilter);
+  });
 
   if (!list.length) {
     grid.innerHTML = `<div class="empty-state">${t("emptyState")}</div>`;
     return;
   }
 
+  // Emergency cases first
+  list = [
+    ...list.filter((c) => (c.categories || [c.category]).includes("emergency")),
+    ...list.filter((c) => !(c.categories || [c.category]).includes("emergency")),
+  ];
+
   list.forEach((c) => grid.appendChild(buildCaseCard(c)));
 }
+
+
 
 function pct(c) {
   if (!c.goal) return 0;
@@ -218,10 +232,16 @@ function pct(c) {
 function buildCaseCard(c) {
   const card = document.createElement("button");
   card.type = "button";
-  card.className = "case-card";
+  const cats = c.categories || [c.category];
+  const primaryCat = cats[0];
+  const catMeta = CATEGORIES[primaryCat] || {};
+  const isEmergency = cats.includes("emergency");
+  card.className = isEmergency ? "case-card case-card--emergency" : "case-card";
+  if (isEmergency) {
+    card.setAttribute("data-emergency-label", t("emergencyLabel"));
+  }
   const title = currentLang === "ar" ? c.title_ar : c.title_en;
   const summary = currentLang === "ar" ? c.summary_ar : c.summary_en;
-  const catMeta = CATEGORIES[c.category] || {};
   const isDone = c.status === "completed";
   const p = pct(c);
   const num = String(c.id).padStart(2, "0");
@@ -229,7 +249,7 @@ function buildCaseCard(c) {
   card.innerHTML = `
     <div class="case-photo" style="background-image:url('${c.image}')">
       <span class="case-tag case-tag--num">${t("caseWord")} #${num}</span>
-      <span class="case-tag case-tag--cat" style="--cat-color:${catMeta.color}">${catMeta.icon} ${t(`cat_${c.category}`)}</span>
+      <span class="case-tag case-tag--cat" style="--cat-color:${catMeta.color}">${catMeta.icon} ${t(`cat_${primaryCat}`)}${cats.length > 1 ? ` +${cats.length - 1}` : ""}</span>
       ${isDone ? `<span class="case-tag case-tag--done">✓ ${t("statusFunded")}</span>` : ""}
     </div>
     <div class="case-body">
@@ -255,7 +275,7 @@ function openCaseModal(c, silent) {
   const title = currentLang === "ar" ? c.title_ar : c.title_en;
   const details = currentLang === "ar" ? c.details_ar : c.details_en;
   const location = currentLang === "ar" ? c.location_ar : c.location_en;
-  const catMeta = CATEGORIES[c.category] || {};
+  const cats = c.categories || [c.category];
   const isDone = c.status === "completed";
   const p = pct(c);
   const num = String(c.id).padStart(2, "0");
@@ -270,7 +290,10 @@ function openCaseModal(c, silent) {
       </div>
       <h2>${title}</h2>
       <div class="modal-meta-row">
-        <span class="pill">${catMeta.icon} ${t(`cat_${c.category}`)}</span>
+        ${cats.map(cat => {
+          const meta = CATEGORIES[cat] || {};
+          return `<span class="pill">${meta.icon} ${t(`cat_${cat}`)}</span>`;
+        }).join("")}
         <span class="pill">📍 ${location}</span>
         <span class="pill ${isDone ? "status-done" : ""}">${isDone ? "✓ " + t("statusFunded") : "● " + t("statusActive")}</span>
       </div>
@@ -297,6 +320,7 @@ function openCaseModal(c, silent) {
     document.body.style.overflow = "hidden";
   }
 }
+
 
 function closeCaseModal() {
   $("#modalOverlay").classList.remove("is-open");
