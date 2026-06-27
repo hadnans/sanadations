@@ -15,11 +15,14 @@ const CONFIG = {
 };
 
 const CATEGORIES = {
-  food:     { icon: "🍲", color: "var(--cat-food)" },
-  money:    { icon: "💰", color: "var(--cat-money)" },
-  medicine: { icon: "💊", color: "var(--cat-medicine)" },
-  work:     { icon: "🛠️", color: "var(--cat-work)" },
-  shelter:  { icon: "🏠", color: "var(--cat-shelter)" },
+  food:      { icon: "🍲", color: "var(--cat-food)" },
+  money:     { icon: "💰", color: "var(--cat-money)" },
+  medicine:  { icon: "💊", color: "var(--cat-medicine)" },
+  work:      { icon: "🛠️", color: "var(--cat-work)" },
+  shelter:   { icon: "🏠", color: "var(--cat-shelter)" },
+  debt:      { icon: "📋", color: "var(--cat-debt)" },
+  marriage:  { icon: "💍", color: "var(--cat-marriage)" },
+  emergency: { icon: "🚨", color: "var(--cat-emergency)" },
 };
 
 const I18N = {
@@ -38,7 +41,7 @@ const I18N = {
     statCompleted: "Fully funded",
     filtersHeading: "Browse by category",
     filterAll: "All",
-    cat_food: "Food", cat_money: "Money", cat_medicine: "Medicine", cat_work: "Work", cat_shelter: "Shelter",
+    cat_food: "Food", cat_money: "Money", cat_medicine: "Medicine", cat_work: "Work", cat_shelter: "Shelter", cat_debt: "Debt", cat_marriage: "Marriage", cat_emergency: "Emergency",
     casesHeading: "Open cases",
     casesSub: "Tap any case for the full story and to donate.",
     raisedOf: "of",
@@ -83,7 +86,7 @@ const I18N = {
     statCompleted: "حالات مكتملة",
     filtersHeading: "تصفح حسب الفئة",
     filterAll: "الكل",
-    cat_food: "طعام", cat_money: "مال", cat_medicine: "دواء", cat_work: "عمل", cat_shelter: "مأوى",
+    cat_food: "طعام", cat_money: "مال", cat_medicine: "دواء", cat_work: "عمل", cat_shelter: "مأوى",cat_debt: "ديون", cat_marriage: "زواج", cat_emergency: "طارئة",
     casesHeading: "الحالات المفتوحة",
     casesSub: "اضغط على أي حالة لمعرفة التفاصيل والتبرع.",
     raisedOf: "من",
@@ -355,9 +358,9 @@ function renderMonthlyChart() {
     const idx = Number(m) - 1;
     return MONTH_NAMES[currentLang][idx] || r[0];
   });
-
-  const colorMap = {
+const colorMap = {
     food: "#6B7A41", money: "#946E20", medicine: "#3E7C8C", work: "#8B5E34", shelter: "#6B4E71",
+    debt: "#B5453A", marriage: "#D4849B", emergency: "#CC3333",
   };
 
   const datasets = catKeys.map((key, i) => ({
