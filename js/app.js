@@ -7,7 +7,7 @@ const CONFIG = {
   // Update these with your real links before deploying.
   whatsappGroup: "https://chat.whatsapp.com/Eqg3c7cumM86QkJUWGUyyK",
   telegramChannel: "https://t.me/+4f58o_o-Vh85NTY0",
-  contactLink: "mailto:hello@example.com",
+  contactLink: "sandations@gmail.com",
   // Used to build a prefilled WhatsApp message when someone taps "Donate".
   donateWhatsapp: "https://chat.whatsapp.com/Eqg3c7cumM86QkJUWGUyyK",
   casesFile: "data/cases.json",
